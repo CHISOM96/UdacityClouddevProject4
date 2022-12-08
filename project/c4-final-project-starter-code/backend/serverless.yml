@@ -80,15 +80,15 @@ functions:
           request:
             schemas:
               application/json: ${file(models/create-todo-model.json)}
-      iamRoleStatements:
-      - Effect: Allow
-      Action:
-        - dynamodb:PutItem
-      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+iamRoleStatements:
+  - Effect: Allow
+    Action:
+     - dynamodb:PutItem
+Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
 
   # TODO: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements, and request schemas
-  UpdateTodo:
+UpdateTodo:
     handler: src/lambda/http/updateTodo.handler
     events:
       - http:
@@ -105,7 +105,7 @@ functions:
 
   # TODO: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements
-  DeleteTodo:
+DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
     events:
       - http:
@@ -114,7 +114,7 @@ functions:
 
   # TODO: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements
-  GenerateUploadUrl:
+GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
     events:
       - http:
@@ -146,27 +146,26 @@ resources:
     GatewayResponseDefault4XX:
       Type: AWS::ApiGateway::GatewayResponse
       Properties:
-    
     # TODO: Create a DynamoDB table with local secondary index and a composite key
-    TodosTable:
+TodosTable:
       Type: AWS::DynamoDB::Table
       Properties:
            Properties:
-        AttributeDefinitions:
+AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
           - AttributeName: todoId
             AttributeType: S
           - AttributeName: createdAt
             AttributeType: S
-        KeySchema:
+KeySchema:
           - AttributeName: userId
             KeyType: HASH
           - AttributeName: todoId
             KeyType: RANGE
-        BillingMode: PAY_PER_REQUEST
-        TableName: ${self:provider.environment.TODOS_TABLE}
-        GlobalSecondaryIndexes:
+BillingMode: PAY_PER_REQUEST
+TableName: ${self:provider.environment.TODOS_TABLE}
+GlobalSecondaryIndexes:
           - IndexName: ${self:provider.environment.TODOS_CREATED_AT_INDEX}
             KeySchema:
               - AttributeName: todoId
@@ -178,11 +177,11 @@ resources:
 
     # TODO: Complete the bucket properties below. 
     # Do not forget to add the CorsConfiguration propoerty
-    AttachmentsBucket:
+AttachmentsBucket:
       Type: AWS::S3::Bucket
       Properties:
        BucketName: ${self:provider.environment.ATTACHMENT_S3_BUCKET}
-        CorsConfiguration:
+CorsConfiguration:
           CorsRules:
             -
               AllowedOrigins:
@@ -199,7 +198,7 @@ resources:
 
     # TODO: Complete the policy below and attach it to the bucket defined above
     # For cross referencing the name of the bucket, use "!Ref AttachmentsBucket"
-    BucketPolicy:
+BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
       PolicyDocument:
@@ -211,4 +210,4 @@ resources:
               Principal: '*'
               Action: 's3:*'
               Resource: 'arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*'
-        Bucket: !Ref AttachmentsBucket
+Bucket: !Ref AttachmentsBucket

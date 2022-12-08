@@ -1,13 +1,13 @@
-import { TodosAccess } from './todosAcess'
-import { AttachmentUtils } from './attachmentUtils';
-import { TodoItem } from '../models/TodoItem'
-import { CreateTodoRequest } from '../requests/CreateTodoRequest'
-import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
-import { createLogger } from '../utils/logger'
 import * as uuid from 'uuid'
-import * as createError from 'http-errors'
 
-// TODO: Implement businessLogic
+import { TodoItem, PageableTodoItems } from '../models/TodoItem'
+import { todoAcess } from '../todosAcess'
+import { CreateTodoRequest } from '../requests/CreateTodoRequest'
+import { AttachmentAccess } from '../attachmentUtils'
+import { createLogger } from '../utils/logger'
+import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
+import { Key } from 'aws-sdk/clients/dynamodb'
+
 const todoAccess = new TodoAccess()
 const attachmentAccess = new AttachmentAccess()
 

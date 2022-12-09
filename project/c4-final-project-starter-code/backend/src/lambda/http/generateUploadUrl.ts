@@ -1,8 +1,10 @@
 import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
+
 import * as middy from 'middy'
-import { cors, httpErrorHandler } from 'middy/middlewares'
+import { cors } from 'middy/middlewares'
+import { createLogger } from '../../utils/logger'
 import { attachTodo } from '../../helpers/todos'
 import { getUserId } from '../utils'
 
@@ -14,7 +16,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
   const todoId = event.pathParameters.todoId
 
   try {
-    const url = await attachTodo(user, todo)
+    const url = await attachTodo(userId, todoId)
     return {
       statusCode: 200,
       body: JSON.stringify({

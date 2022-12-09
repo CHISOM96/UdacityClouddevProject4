@@ -1,23 +1,21 @@
 import 'source-map-support/register'
-import { getUserId, parseLimitParameter, parseNextKeyParameter, encodeNextKey } from '../utils'
+
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
+
+import { getUserId, parseLimitParameter, parseNextKeyParameter, encodeNextKey } from '../utils'
 import { createLogger } from '../../utils/logger'
 import { getAllTodos } from '../../helpers/todos'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 
-import { getTodosForUser as getTodosForUser } from '../../businessLogic/todos';
-//import { getUserId } from '../utils';
+const logger = createLogger('getTodos')
 
-// TODO: Get all TODO items for a current user
-export const handler = middy(
-  async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    // Write your code here
- logger.info('Processing event: ', event)
-    
-let nextKey // Next key to continue scan operation if necessary
+export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  // TODO: Get all TODO items for a current user
+  logger.info('Processing event: ', event)
 
-let limit // Maximum number of elements to return
+  let nextKey // Next key to continue scan operation if necessary
+  let limit // Maximum number of elements to return
 
   try {
     // Parse query parameters
@@ -34,7 +32,7 @@ let limit // Maximum number of elements to return
   }
 
   const userId = getUserId(event)
-  const todos = await getAllTodos(userId, nextKey, limit);
+  const items = await getAllTodos(userId, nextKey, limit);
 
   return {
     statusCode: 200,

@@ -4,7 +4,7 @@ import { DocumentClient, Key } from 'aws-sdk/clients/dynamodb'
 import { TodoItem, PageableTodoItems } from '../models/TodoItem'
 import { TodoUpdate } from '../models/TodoUpdate'
 
-export class todoAcess {
+export class TodoAcess {
 
   constructor(
     private readonly docClient: DocumentClient = createDynamoDBClient(),
